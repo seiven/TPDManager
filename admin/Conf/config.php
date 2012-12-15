@@ -9,10 +9,10 @@ $config	= array(
     'URL_MODEL'=>1,
     'DB_TYPE'               => 'mysql',     // 数据库类型
 	'DB_HOST'               => 'localhost', // 服务器地址
-	'DB_NAME'               => 'think-manager',          // 数据库名
-	'DB_USER'               => 'seiven',      // 用户名
-	'DB_PWD'                => 'chen18li',          // 密码
-	'DB_PREFIX'             => 'hp_',    // 权限系统数据库表前缀
+	'DB_NAME'               => 'tpdmanager',          // 数据库名
+	'DB_USER'               => 'root',      // 用户名
+	'DB_PWD'                => '',          // 密码
+	'DB_PREFIX'             => 'tpd_',    // 权限系统数据库表前缀
 
     'DB_LIKE_FIELDS'=>'title|remark',
 	'APP_AUTOLOAD_PATH'=>'@.TagLib',
