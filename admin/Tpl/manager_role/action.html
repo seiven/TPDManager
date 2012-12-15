@@ -1,0 +1,85 @@
+<if condition="!empty($_GET['appId']) and !empty($_GET['moduleId'])" >
+  <div class="unit">
+    <volist id="item" name="actionList"> <span>
+      <input <?php echo in_array($key, $groupActionList) ? "checked" : "" ?> type="checkbox" name="groupActionId[]" value="{$key}"/>
+      {$item} </span> </volist>
+  </div>
+  <elseif condition="!empty($_GET['appId'])" />
+  <div class="unit">
+    <label>选择模块:</label>
+    <select name="moduleId" class="combox" onchange="selectModule_action('#setActionAction')">
+      <option value="">选择模块</option>
+      <volist id="item" name="moduleList">
+        <option value="{$key}" <?php echo in_array($key, $selectModuleId) ? "selected" : "" ?>>{$item}</option>
+      </volist>
+    </select>
+  </div>
+  <div id="actionSelectBox">
+    <volist id="item" name="actionList">
+      <div class="unit">
+        <input <?php echo in_array($key, $groupActionList) ? "checked" : "" ?> type="checkbox" name="groupActionId[]" value="{$key}"/>
+        {$item} </div>
+    </volist>
+  </div>
+  <else />
+  <form id="setActionAction" method="post" action="__URL__/setAction" class="pageForm required-validate" onsubmit="return validateCallback(this, dialogAjaxDone)">
+    <input type="hidden" name="groupId" VALUE="{$Think.get.groupId}" />
+    <div class="pageFormContent" layoutH="100" layoutType="dialog">
+      <div class="unit">
+        <label>选择项目:</label>
+        <select name="appId" class="combox" onchange="selectApp_action('#setActionAction')">
+          <option value="">选择项目</option>
+          <volist id="item" name="appList">
+            <option value="{$key}" <?php echo in_array($key, $selectAppId) ? "selected" : "" ?>>{$item}</option>
+          </volist>
+        </select>
+      </div>
+      <div id="moduleSelectBox">
+        <div class="unit">
+          <label>选择模块:</label>
+          <select name="moduleId" class="combox" onchange="selectModule_action('#setActionAction')">
+            <option value="">选择模块</option>
+            <volist id="item" name="moduleList">
+              <option value="{$key}" <?php echo in_array($key, $selectModuleId) ? "selected" : "" ?>>{$item}</option>
+            </volist>
+          </select>
+        </div>
+        <div id="actionSelectBox">
+          <volist id="item" name="actionList">
+            <div class="unit">
+              <input <?php echo in_array($key, $groupActionList) ? "checked" : "" ?> type="checkbox" name="groupActionId[]" value="{$key}"/>
+              {$item} </div>
+          </volist>
+        </div>
+      </div>
+    </div>
+    <div class="formBar">
+      <label style="float:left">
+        <input type="checkbox" class="checkboxCtrl" group="groupActionId[]" />
+        全选</label>
+      <ul>
+        <li>
+          <div class="button">
+            <div class="buttonContent">
+              <button type="button" class="checkboxCtrl" group="groupActionId[]" selectType="invert">反选</button>
+            </div>
+          </div>
+        </li>
+        <li>
+          <div class="buttonActive">
+            <div class="buttonContent">
+              <button type="submit">保存</button>
+            </div>
+          </div>
+        </li>
+        <li>
+          <div class="button">
+            <div class="buttonContent">
+              <button type="button" onclick="$.pdialog.closeCurrent()">取消</button>
+            </div>
+          </div>
+        </li>
+      </ul>
+    </div>
+  </form>
+</if>

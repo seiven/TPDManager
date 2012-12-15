@@ -1,0 +1,66 @@
+
+<div class="pageContent">
+  <form method="post" action="__URL__/update/navTabId/__MODULE__" class="pageForm required-validate" onsubmit="return validateCallback(this, dialogAjaxDone)">
+    <input type="hidden" name="user_id" value="<?php echo $_SESSION[C('USER_AUTH_KEY')] ?>"/>
+    <input type="hidden" name="id" value="{$vo.id}" />
+    <div class="pageFormContent" layoutH="58">
+      <div class="unit">
+        <label>上级菜单：</label>
+        <select name="pid" class="combox">
+          <option value="0">顶级菜单</option>
+          <volist id="tv" name="top_menus">
+            <option value="{$tv['id']}"  <eq name="vo.pid" value="$tv['id']">selected</eq>>{$tv['title']}</option>
+          </volist>
+        </select>
+      </div>
+      <div class="unit">
+        <label>菜单名称：</label>
+        <input type="text" class="required"  name="title" value="{$vo.title}" />
+      </div>
+      <div class="unit">
+        <label>Controller：</label>
+        <select name="controller" class="combox" ref="refaction" refurl="{:u('manager_menus/get_action_by_controllername?controllername=')}{value}">
+          <option value="">顶级菜单</option>
+          <volist id="v" name="controllers">
+            <option value="{$v['name']}" <eq name="v.name" value="$vo.controller">selected</eq> >{$v['name']}({$v['title']})</option>
+          </volist>
+        </select>
+      </div>
+      <div class="unit">
+        <label>Action：</label>
+        <select class="combox" name="action" id="refaction">
+            <if condition="$vo['action']">
+            <option value="{$vo.action}">{$vo.action}</option>
+            <else>
+        	<option value="index">默认节点(index)</option>
+            </if>
+        </select>
+      </div>
+      <div class="unit">
+        <label>打开方式：</label>
+        <select name="target" class="combox">
+          <option value="navTab" <eq name="vo.target" value="navTab">selected</eq>>正常页面</option>
+          <option value="dialog" <eq name="vo.target" value="dialog">selected</eq>>弹窗</option>
+        </select>
+      </div>
+    </div>
+    <div class="formBar">
+      <ul>
+        <li>
+          <div class="buttonActive">
+            <div class="buttonContent">
+              <button type="submit">提交</button>
+            </div>
+          </div>
+        </li>
+        <li>
+          <div class="button">
+            <div class="buttonContent">
+              <button type="button" class="close">取消</button>
+            </div>
+          </div>
+        </li>
+      </ul>
+    </div>
+  </form>
+</div>

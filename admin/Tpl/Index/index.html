@@ -1,0 +1,147 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta http-equiv="X-UA-Compatible" content="IE=7" />
+<title>{$Think.config.sitename}</title>
+<link href="__PUBLIC__/dwz/themes/default/style.css" rel="stylesheet" type="text/css" />
+<link href="__PUBLIC__/dwz/themes/css/core.css" rel="stylesheet" type="text/css" />
+<!--[if IE]>
+<link href="__PUBLIC__/dwz/themes/css/ieHack.css" rel="stylesheet" type="text/css" />
+<![endif]-->
+
+<script src="__PUBLIC__/dwz/js/speedup.js" type="text/javascript"></script>
+<script src="__PUBLIC__/dwz/js/jquery-1.7.1.min.js" type="text/javascript"></script>
+<script src="__PUBLIC__/dwz/js/jquery.cookie.js" type="text/javascript"></script>
+<script src="__PUBLIC__/dwz/js/jquery.validate.js" type="text/javascript"></script>
+<script src="__PUBLIC__/dwz/js/jquery.bgiframe.js" type="text/javascript"></script>
+<script src="__PUBLIC__/xheditor/xheditor-1.1.9-zh-cn.min.js" type="text/javascript"></script>
+<script src="__PUBLIC__/dwz/js/dwz.min.js" type="text/javascript"></script>
+<script src="__PUBLIC__/dwz/js/dwz.regional.zh.js" type="text/javascript"></script>
+<script type="text/javascript">
+function fleshVerify(){
+	//重载验证码
+	$('#verifyImg').attr("src", '__APP__/Public/verify/'+new Date().getTime());
+}
+function dialogAjaxMenu(json){
+	dialogAjaxDone(json);
+	if (json.statusCode == DWZ.statusCode.ok){
+		$("#sidebar").loadUrl("__APP__/Public/menu");
+	}
+}
+function navTabAjaxMenu(json){
+	navTabAjaxDone(json);
+	if (json.statusCode == DWZ.statusCode.ok){
+		$("#sidebar").loadUrl("__APP__/Public/menu");
+	}
+}
+$(function(){
+	DWZ.init("__PUBLIC__/dwz/dwz.frag.xml", {
+		loginUrl:"__APP__/Public/login_dialog", loginTitle:"登录",	// 弹出登录对话框
+//		loginUrl:"__APP__/Public/login",	//跳到登录页面
+		statusCode:{ok:1,error:0},
+		pageInfo:{pageNum:"pageNum", numPerPage:"numPerPage", orderField:"_order", orderDirection:"_sort"}, //【可选】
+		debug:false,	// 调试模式 【true|false】
+		callback:function(){
+			initEnv();
+			$("#themeList").theme({themeBase:"__PUBLIC__/dwz/themes"});
+		}
+	});
+});
+</script>
+</head>
+
+<body scroll="no">
+<div id="layout">
+  <div id="header">
+    <div class="headerNav"> <a class="logo" href="__APP__">Logo</a>
+      <ul class="nav">
+        <li><a href="__APP__/Public/main" target="dialog" width="580" height="360" rel="sysInfo">系统消息</a></li>
+        <li><a href="__APP__/Public/password/" target="dialog" mask="true">修改密码</a></li>
+        <li><a href="__APP__/Public/profile/" target="dialog" mask="true">修改资料</a></li>
+        <li><a href="__APP__/Public/logout/">退出</a></li>
+      </ul>
+      <ul class="themeList" id="themeList">
+        <li theme="default">
+          <div class="selected">蓝色</div>
+        </li>
+        <li theme="green">
+          <div>绿色</div>
+        </li>
+        <li theme="purple">
+          <div>紫色</div>
+        </li>
+        <li theme="silver">
+          <div>银色</div>
+        </li>
+        <li theme="azure">
+          <div>天蓝</div>
+        </li>
+      </ul>
+    </div>
+  </div>
+  <div id="leftside">
+    <div id="sidebar_s">
+      <div class="collapse">
+        <div class="toggleCollapse">
+          <div></div>
+        </div>
+      </div>
+    </div>
+    <div id="sidebar"> <include file="Public:menu" /> </div>
+  </div>
+  <div id="container">
+    <div id="navTab" class="tabsPage">
+      <div class="tabsPageHeader">
+        <div class="tabsPageHeaderContent"><!-- 显示左右控制时添加 class="tabsPageHeaderMargin" -->
+          <ul class="navTab-tab">
+            <li tabid="main" class="main"><a href="javascript:void(0)"><span><span class="home_icon">我的主页</span></span></a></li>
+          </ul>
+        </div>
+        <div class="tabsLeft">left</div>
+        <!-- 禁用只需要添加一个样式 class="tabsLeft tabsLeftDisabled" -->
+        <div class="tabsRight">right</div>
+        <!-- 禁用只需要添加一个样式 class="tabsRight tabsRightDisabled" -->
+        <div class="tabsMore">more</div>
+      </div>
+      <ul class="tabsMoreList">
+        <li><a href="javascript:void(0)">我的主页</a></li>
+      </ul>
+      <div class="navTab-panel tabsPageContent layoutBox">
+        <div class="page unitBox">
+          <div layouth="0" class="pageFormContent">
+            <p style="color:red">DWZ官方微博 <a target="_blank" href="http://weibo.com/dwzui">http://weibo.com/dwzui</a></p>
+            <p style="color:red">DWZ官方微群 <a target="_blank" href="http://q.weibo.com/587328/invitation=11TGXSt-148c2">http://q.weibo.com/587328/invitation=11TGXSt-148c2</a></p>
+            <div class="divider"></div>
+            <h2>dwz v1.2视频教程:</h2>
+            <p><a target="_blank" href="http://www.u-training.com/thread-57-1-1.html">http://www.u-training.com/thread-57-1-1.html</a></p>
+            <div class="divider"></div>
+            <h2>DWZ系列开源项目:</h2>
+            <div class="unit"><a target="_blank" href="http://code.google.com/p/dwz/">dwz富客户端框架 - jUI</a></div>
+            <div class="unit"><a target="_blank" href="http://code.google.com/p/dwz4j">dwz4j(Java Web)快速开发框架 + jUI整合应用</a></div>
+            <div class="unit"><a target="_blank" href="http://code.google.com/p/j-hi">J-HI(Java Web)快速开发平台 + jUI整合应用（Eclipse插件生成项目代码）</a></div>
+            <div class="unit"><a target="_blank" href="http://code.google.com/p/dwz4php">ThinkPHP + jUI整合应用</a></div>
+            <div class="unit"><a target="_blank" href="http://code.google.com/p/dwz4php">Zend Framework + jUI整合应用</a></div>
+            <div class="unit"><a target="_blank" href="http://www.yiiframework.com/extension/dwzinterface/">YII + jUI整合应用</a></div>
+            <div class="divider"></div>
+            <h2>常见问题及解决:</h2>
+            <pre style="margin:5px;line-height:1.4em">Error loading XML document: dwz.frag.xml
+直接用IE打开index.html弹出一个对话框：Error loading XML document: dwz.frag.xml
+原因：没有加载成功dwz.frag.xml。IE ajax laod本地文件有限制, 是ie安全级别的问题, 不是框架的问题。
+解决方法：用firefox打开或部署到apache下。
+</pre>
+            <div class="divider"></div>
+            <h2>有偿服务请联系:</h2>
+            <pre style="margin:5px;line-height:1.4em;">定制化开发，公司培训，技术支持
+合作电话：010-52897073
+邮箱：support@dwzjs.com
+</pre>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div id="footer">Copyright &copy; 2012 Seiven</div>
+</body>
+</html>

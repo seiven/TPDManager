@@ -1,0 +1,23 @@
+<div class="toggleCollapse">
+  <h2>管理菜单</h2>
+  <div>收缩</div>
+</div>
+<div class="accordion" fillSpace="sideBar">
+  <div class="accordionContent">
+    <ul class="tree treeFolder">
+      <volist id="nav" name="navs" >
+        <li> <a 
+          <if condition="!count($nav['child'])">href="__APP__/{$nav['controller']}/{$nav['action']}" target="{$nav['target']}" mask="true" rel="{$nav['title']}"</if>
+          >{$nav['title']}</a>
+          <if condition="count($nav['child'])">
+            <ul>
+              <volist id="cnav" name="nav.child" >
+                <li><a href="__APP__/{$cnav['controller']}/{$cnav['action']}" target="{$cnav['target']}" mask="true" rel="{$cnav['title']}">{$cnav['title']}</a></li>
+              </volist>
+            </ul>
+          </if>
+        </li>
+      </volist>
+    </ul>
+  </div>
+</div>

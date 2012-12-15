@@ -1,0 +1,16 @@
+<div class="unit">
+  <label>选择模块:</label>
+  <select name="moduleId" onchange="selectModule_action('#setActionAction')">
+    <option value="">选择模块</option>
+    <volist id="item" name="moduleList">
+      <option value="{$key}" <?php echo in_array($key, $selectModuleId) ? "selected" : "" ?>>{$item}</option>
+    </volist>
+  </select>
+</div>
+<div id="actionSelectBox">
+  <volist id="item" name="actionList">	
+    <div class="unit">
+      <input <?php echo in_array($key, $groupActionList) ? "checked" : "" ?> type="checkbox" name="groupActionId[]" value="{$key}"/>
+      {$item} </div>
+  </volist>
+</div>
