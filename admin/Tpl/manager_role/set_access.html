@@ -1,0 +1,43 @@
+<h2 class="contentTitle" style="margin-bottom:0; border-bottom:1px #333">{$role.name} & 角色授权</h2>
+<style type="text/css">
+.setAccess label{width:auto}
+</style>
+<form method="post" action="__URL__/set_access" class="pageForm required-validate" onsubmit="return validateCallback(this, dialogAjaxDone)">
+  <input type="hidden" name="role_id" value="{$role.id}" />
+  <input type="hidden" name="isajax" value="1" />
+  <div class="pageFormContent setAccess" layoutH="87">
+    <volist name="nodes" id="v">
+      <if condition="count($v['child']) gt 0">
+        <fieldset>
+          <legend><font color="#333">{$v.title}</font></legend>
+          <volist name="v.child" id="vc">
+            <label>
+              <input type="checkbox" name="role[]" value="{$vc.id}_{$vc.level}_{$vc.pid}" <eq name="vc.access" value="1">checked</eq> align="absmiddle"/>
+              {$vc.title}</label>
+          </volist>
+        </fieldset>
+      </if>
+    </volist>
+  </div>
+  <div class="formBar">
+    <label style="float:left">
+      <input type="checkbox" class="checkboxCtrl" group="role[]" />
+      全选</label>
+    <ul> 
+      <li>
+        <div class="buttonActive">
+          <div class="buttonContent">
+            <button type="submit">提交</button>
+          </div>
+        </div>
+      </li>
+      <li>
+        <div class="buttonActive">
+          <div class="buttonContent">
+            <button type="botton" class="close">取消 </button>
+          </div>
+        </div>
+      </li>
+    </ul>
+  </div>
+</form>

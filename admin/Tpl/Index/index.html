@@ -23,18 +23,6 @@ function fleshVerify(){
 	//重载验证码
 	$('#verifyImg').attr("src", '__APP__/Public/verify/'+new Date().getTime());
 }
-function dialogAjaxMenu(json){
-	dialogAjaxDone(json);
-	if (json.statusCode == DWZ.statusCode.ok){
-		$("#sidebar").loadUrl("__APP__/Public/menu");
-	}
-}
-function navTabAjaxMenu(json){
-	navTabAjaxDone(json);
-	if (json.statusCode == DWZ.statusCode.ok){
-		$("#sidebar").loadUrl("__APP__/Public/menu");
-	}
-}
 $(function(){
 	DWZ.init("__PUBLIC__/dwz/dwz.frag.xml", {
 		loginUrl:"__APP__/Public/login_dialog", loginTitle:"登录",	// 弹出登录对话框
@@ -49,6 +37,15 @@ $(function(){
 	});
 });
 </script>
+<style type="text/css">
+a.btnText {
+	background: none repeat scroll 0 0 transparent;
+	cursor: pointer;
+	line-height: 20px;
+	text-indent: 5px;
+	width: auto;
+}
+</style>
 </head>
 
 <body scroll="no">
@@ -56,7 +53,7 @@ $(function(){
   <div id="header">
     <div class="headerNav"> <a class="logo" href="__APP__">Logo</a>
       <ul class="nav">
-        <li><a href="__APP__/Public/main" target="dialog" width="580" height="360" rel="sysInfo">系统消息</a></li>
+        <li><a href="/" target="navTab" rel="external" height="600" external='true' mask="true">前台预览</a></li>
         <li><a href="__APP__/Public/password/" target="dialog" mask="true">修改密码</a></li>
         <li><a href="__APP__/Public/profile/" target="dialog" mask="true">修改资料</a></li>
         <li><a href="__APP__/Public/logout/">退出</a></li>
@@ -119,6 +116,6 @@ $(function(){
     </div>
   </div>
 </div>
-<div id="footer">Copyright &copy; 2012 {$Think.config.COMPANY}</div>
+<div id="footer">Copyright &copy; 2012 Seiven</div>
 </body>
 </html>

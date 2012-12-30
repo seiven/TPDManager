@@ -1,5 +1,5 @@
 <div class="pageContent">
-  <form method="post" action="__URL__/insert/navTabId/__MODULE__" class="pageForm required-validate" onsubmit="return validateCallback(this, dialogAjaxMenu)">
+  <form method="post" action="__URL__/add/navTabId/__MODULE__" class="pageForm required-validate" onsubmit="return validateCallback(this, dialogAjaxDone)">
     <input type="hidden" name="user_id" value="<?php echo $_SESSION[C('USER_AUTH_KEY')] ?>"/>
     <input type="hidden" name="level" value="{$level}">
     <input type="hidden" name="pid" value="{$pid}">
@@ -11,16 +11,7 @@
       <div class="unit">
         <label>显示名：</label>
         <input type="text" class="required"   name="title">
-      </div>
-      <div class="unit">
-        <label>分 组：</label>
-        <SELECT name="group_id" class="combox">
-          <option value="">未分组</option>
-          <volist name="list" id="vo">
-            <option value="{$vo.id}">{$vo.title}</option>
-          </volist>
-        </SELECT>
-      </div>
+      </div> 
       <div class="unit">
         <label>状态：</label>
         <SELECT name="status" class="combox">

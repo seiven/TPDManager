@@ -1,5 +1,5 @@
 <div class="pageContent">
-  <form method="post" action="__URL__/update/navTabId/__MODULE__" class="pageForm required-validate" onsubmit="return validateCallback(this, dialogAjaxMenu)">
+  <form method="post" action="__URL__/edit/navTabId/__MODULE__" class="pageForm required-validate" onsubmit="return validateCallback(this, dialogAjaxDone)">
     <input type="hidden" name="user_id" value="<?php echo $_SESSION[C('USER_AUTH_KEY')] ?>">
     <input type="hidden" name="id" value="{$vo.id}" >
     <input type="hidden" name="ajax" value="1">
@@ -14,26 +14,29 @@
         <input type="text" class="required"  name="title" value="{$vo.title}">
       </div>
       <div class="unit">
-        <label>分 组：</label>
-        <select name="group_id" class="combox">
-          <option value="">未分组</option>
-          <volist name="list" id="group"> 
-          	<option value="{$group.id}" <eq name="group.id" value="$vo['group_id']">selected</eq>>{$group.title}  </option>
-          </volist>
-        </select>
-      </div>
-      <div class="unit">
         <label>状态：</label>
         <select name="status" class="combox">
-          <option <eq name="vo.status" value="1" >selected</eq> value="1">启用 </option>
-          <option <eq name="vo.status" value="0" >selected</eq> value="0">禁用</option>
+          <option 
+          <eq name="vo.status" value="1" >selected</eq>
+           value="1">启用 
+          </option>
+          <option 
+          <eq name="vo.status" value="0" >selected</eq>
+           value="0">禁用
+          </option>
         </select>
       </div>
       <div class="unit">
         <label>菜单：</label>
         <SELECT name="ismenu" class="combox">
-          <option value="1" <eq name="vo.ismenu" value="1" >selected</eq>>是菜单</option>
-          <option value="0" <eq name="vo.ismenu" value="0" >selected</eq>>不做菜单</option>
+          <option value="1" 
+          <eq name="vo.ismenu" value="1" >selected</eq>
+          >是菜单
+          </option>
+          <option value="0" 
+          <eq name="vo.ismenu" value="0" >selected</eq>
+          >不做菜单
+          </option>
         </SELECT>
       </div>
       <div class="unit">

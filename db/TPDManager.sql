@@ -3,7 +3,7 @@
 -- Server version:               5.1.41 - Source distribution
 -- Server OS:                    Win32
 -- HeidiSQL version:             7.0.0.4053
--- Date/time:                    2012-12-15 14:17:51
+-- Date/time:                    2012-12-30 17:05:36
 -- --------------------------------------------------------
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
@@ -28,19 +28,36 @@ CREATE TABLE IF NOT EXISTS `tpd_manager_access` (
   KEY `nodeId` (`node_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
--- Dumping data for table tpdmanager.tpd_manager_access: 10 rows
+-- Dumping data for table tpdmanager.tpd_manager_access: 125 rows
 /*!40000 ALTER TABLE `tpd_manager_access` DISABLE KEYS */;
 INSERT INTO `tpd_manager_access` (`role_id`, `node_id`, `level`, `pid`, `module`) VALUES
-	(7, 84, 3, 7, NULL),
-	(7, 129, 3, 125, NULL),
-	(7, 127, 2, 1, NULL),
-	(7, 125, 2, 1, NULL),
-	(7, 128, 2, 1, NULL),
-	(7, 30, 2, 1, NULL),
-	(7, 40, 2, 1, NULL),
-	(7, 1, 1, 0, NULL),
-	(7, 36, 3, 30, NULL),
-	(7, 37, 3, 30, NULL);
+	(12, 1, 1, 0, NULL),
+	(12, 127, 2, 1, NULL),
+	(12, 2, 2, 1, NULL),
+	(12, 6, 2, 1, NULL),
+	(12, 7, 2, 1, NULL),
+	(12, 40, 2, 1, NULL),
+	(12, 196, 3, 127, NULL),
+	(12, 180, 3, 127, NULL),
+	(12, 179, 3, 127, NULL),
+	(12, 178, 3, 127, NULL),
+	(12, 177, 3, 127, NULL),
+	(12, 194, 3, 2, NULL),
+	(12, 193, 3, 2, NULL),
+	(12, 192, 3, 2, NULL),
+	(12, 191, 3, 2, NULL),
+	(12, 190, 3, 6, NULL),
+	(12, 189, 3, 6, NULL),
+	(12, 188, 3, 6, NULL),
+	(12, 187, 3, 6, NULL),
+	(12, 186, 3, 6, NULL),
+	(12, 168, 3, 6, NULL),
+	(12, 185, 3, 7, NULL),
+	(12, 184, 3, 7, NULL),
+	(12, 183, 3, 7, NULL),
+	(12, 182, 3, 7, NULL),
+	(12, 181, 3, 7, NULL),
+	(12, 164, 3, 40, NULL);
 /*!40000 ALTER TABLE `tpd_manager_access` ENABLE KEYS */;
 
 
@@ -92,7 +109,7 @@ CREATE TABLE IF NOT EXISTS `tpd_manager_menus` (
   `action` varchar(50) DEFAULT NULL,
   `target` varchar(50) DEFAULT 'navTab',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8 COMMENT='后台管理菜单';
+) ENGINE=InnoDB AUTO_INCREMENT=33 DEFAULT CHARSET=utf8 COMMENT='后台管理菜单';
 
 -- Dumping data for table tpdmanager.tpd_manager_menus: ~5 rows (approximately)
 /*!40000 ALTER TABLE `tpd_manager_menus` DISABLE KEYS */;
@@ -101,7 +118,9 @@ INSERT INTO `tpd_manager_menus` (`id`, `pid`, `title`, `controller`, `action`, `
 	(7, 3, '后台菜单管理', 'manager_menus', 'index', 'navTab'),
 	(8, 3, '节点管理', 'manager_node', 'index', 'navTab'),
 	(9, 3, '角色管理', 'manager_role', 'index', 'navTab'),
-	(10, 3, '后台用户', 'manager_user', 'index', 'navTab');
+	(10, 3, '后台用户', 'manager_user', 'index', 'navTab'),
+	(30, 0, '测试菜单', '', 'index', 'navTab'),
+	(31, 30, '测试菜单', '', 'index', 'navTab');
 /*!40000 ALTER TABLE `tpd_manager_menus` ENABLE KEYS */;
 
 
@@ -124,32 +143,38 @@ CREATE TABLE IF NOT EXISTS `tpd_manager_node` (
   KEY `pid` (`pid`),
   KEY `status` (`status`),
   KEY `name` (`name`)
-) ENGINE=MyISAM AUTO_INCREMENT=130 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=197 DEFAULT CHARSET=utf8;
 
--- Dumping data for table tpdmanager.tpd_manager_node: 21 rows
+-- Dumping data for table tpdmanager.tpd_manager_node: 68 rows
 /*!40000 ALTER TABLE `tpd_manager_node` DISABLE KEYS */;
 INSERT INTO `tpd_manager_node` (`id`, `name`, `title`, `pid`, `status`, `remark`, `sort`, `level`, `type`, `group_id`, `ismenu`) VALUES
-	(49, 'read', '查看', 30, 1, '', NULL, 3, 0, 0, 1),
 	(40, 'Index', '默认模块', 1, 1, '', 1, 2, 0, 0, 1),
-	(39, 'index', '列表', 30, 1, '', NULL, 3, 0, 0, 1),
-	(37, 'resume', '恢复', 30, 1, '', NULL, 3, 0, 0, 1),
-	(36, 'forbid', '禁用', 30, 1, '', NULL, 3, 0, 0, 1),
-	(35, 'foreverdelete', '删除', 30, 1, '', NULL, 3, 0, 0, 1),
-	(34, 'update', '更新', 30, 1, '', NULL, 3, 0, 0, 1),
-	(33, 'edit', '编辑', 30, 1, '', NULL, 3, 0, 0, 1),
-	(32, 'insert', '写入', 30, 1, '', NULL, 3, 0, 0, 1),
-	(31, 'add', '新增', 30, 1, '', NULL, 3, 0, 0, 1),
-	(30, 'Public', '公共模块', 1, 1, '', 2, 2, 0, 0, 1),
 	(7, 'manager_user', '后台用户', 1, 1, '', 4, 2, 0, 2, 1),
 	(6, 'manager_role', '角色管理', 1, 1, '', 3, 2, 0, 2, 1),
 	(2, 'manager_node', '节点管理', 1, 1, '', 2, 2, 0, 0, 1),
-	(1, 'Admin', '后台管理', 0, 1, NULL, NULL, 1, 0, 0, 1),
-	(50, 'main', '空白首页', 40, 1, '', NULL, 3, 0, 0, 1),
-	(84, 'insert', '添加用户', 7, 1, '', NULL, 3, 0, 0, 1),
-	(128, 'user', '用户管理', 1, 1, '', NULL, 2, 0, 0, 1),
-	(125, 'user_group', '用户组管理', 1, 1, '', NULL, 2, 0, 0, 1),
+	(1, 'Admin', '后台管理', 0, 1, '', NULL, 1, 0, 0, 1),
 	(127, 'manager_menus', '后台菜单管理', 1, 1, '', NULL, 2, 0, 0, 1),
-	(129, 'add', '添加用户组', 125, 1, '', NULL, 3, 0, 0, 1);
+	(164, 'index', '管理首页', 40, 1, '', NULL, 3, 0, 0, 1),
+	(168, 'set_access', '用户组授权', 6, 1, '', NULL, 3, 0, 0, 1),
+	(177, 'index', '后台菜单列表', 127, 1, '', NULL, 3, 0, 0, 1),
+	(178, 'add', '新增菜单', 127, 1, '', NULL, 3, 0, 0, 1),
+	(179, 'edit', '编辑菜单', 127, 1, '', NULL, 3, 0, 0, 1),
+	(180, 'get_action_by_contro', '编辑菜单(查询)', 127, 1, '', NULL, 3, 0, 0, 1),
+	(181, 'index', '所有用户', 7, 1, '', NULL, 3, 0, 0, 1),
+	(182, 'add', '新增管理用户', 7, 1, '', NULL, 3, 0, 0, 1),
+	(183, 'edit', '编辑后台用户', 7, 1, '', NULL, 3, 0, 0, 1),
+	(184, 'delete', '删除后台用户', 7, 1, '', NULL, 3, 0, 0, 1),
+	(185, 'password', '编辑用户密码', 7, 1, '', NULL, 3, 0, 0, 1),
+	(186, 'index', '用户分组列表', 6, 1, '', NULL, 3, 0, 0, 1),
+	(187, 'add', '新增用户分组', 6, 1, '', NULL, 3, 0, 0, 1),
+	(188, 'edit', '编辑用户分组', 6, 1, '', NULL, 3, 0, 0, 1),
+	(189, 'delete', '删除用户分组', 6, 1, '', NULL, 3, 0, 0, 1),
+	(190, 'user', '分配分组用户', 6, 1, '', NULL, 3, 0, 0, 1),
+	(191, 'index', '所有节点', 2, 1, '', NULL, 3, 0, 0, 1),
+	(192, 'add', '新增节点', 2, 1, '', NULL, 3, 0, 0, 1),
+	(193, 'edit', '编辑节点', 2, 1, '', NULL, 3, 0, 0, 1),
+	(194, 'delete', '删除节点', 2, 1, '', NULL, 3, 0, 0, 1),
+	(196, 'delete', '删除菜单', 127, 1, '', NULL, 3, 0, 0, 1);
 /*!40000 ALTER TABLE `tpd_manager_node` ENABLE KEYS */;
 
 
@@ -168,12 +193,12 @@ CREATE TABLE IF NOT EXISTS `tpd_manager_role` (
   KEY `parentId` (`pid`),
   KEY `ename` (`ename`),
   KEY `status` (`status`)
-) ENGINE=MyISAM AUTO_INCREMENT=10 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=13 DEFAULT CHARSET=utf8;
 
 -- Dumping data for table tpdmanager.tpd_manager_role: 1 rows
 /*!40000 ALTER TABLE `tpd_manager_role` DISABLE KEYS */;
 INSERT INTO `tpd_manager_role` (`id`, `name`, `pid`, `status`, `remark`, `ename`, `create_time`, `update_time`) VALUES
-	(7, '客服人员', 0, 1, '', NULL, 1254325787, 1345098887);
+	(12, '普通管理员', 0, 1, '普通管理员', NULL, 1356855946, 0);
 /*!40000 ALTER TABLE `tpd_manager_role` ENABLE KEYS */;
 
 
@@ -186,10 +211,10 @@ CREATE TABLE IF NOT EXISTS `tpd_manager_role_user` (
   KEY `user_id` (`user_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
--- Dumping data for table tpdmanager.tpd_manager_role_user: 1 rows
+-- Dumping data for table tpdmanager.tpd_manager_role_user: 17 rows
 /*!40000 ALTER TABLE `tpd_manager_role_user` DISABLE KEYS */;
 INSERT INTO `tpd_manager_role_user` (`role_id`, `user_id`) VALUES
-	(7, '37');
+	(12, '54');
 /*!40000 ALTER TABLE `tpd_manager_role_user` ENABLE KEYS */;
 
 
@@ -203,24 +228,24 @@ CREATE TABLE IF NOT EXISTS `tpd_manager_user` (
   `bind_account` varchar(50) NOT NULL,
   `last_login_time` int(11) unsigned DEFAULT '0',
   `last_login_ip` varchar(40) DEFAULT NULL,
+  `status` tinyint(1) NOT NULL DEFAULT '0',
   `login_count` mediumint(8) unsigned DEFAULT '0',
   `verify` varchar(32) DEFAULT NULL,
   `email` varchar(50) NOT NULL,
   `remark` varchar(255) NOT NULL,
   `create_time` int(11) unsigned NOT NULL,
   `update_time` int(11) unsigned NOT NULL,
-  `status` tinyint(1) DEFAULT '0',
   `type_id` tinyint(2) unsigned DEFAULT '0',
   `info` text NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `account` (`account`)
-) ENGINE=MyISAM AUTO_INCREMENT=38 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=55 DEFAULT CHARSET=utf8;
 
--- Dumping data for table tpdmanager.tpd_manager_user: 2 rows
+-- Dumping data for table tpdmanager.tpd_manager_user: 15 rows
 /*!40000 ALTER TABLE `tpd_manager_user` DISABLE KEYS */;
-INSERT INTO `tpd_manager_user` (`id`, `account`, `nickname`, `password`, `bind_account`, `last_login_time`, `last_login_ip`, `login_count`, `verify`, `email`, `remark`, `create_time`, `update_time`, `status`, `type_id`, `info`) VALUES
-	(1, 'admin', '管理员', '21232f297a57a5a743894a0e4a801fc3', '', 1355551595, '127.0.0.1', 962, '8888', 'liu21st@gmail.com', '备注信息', 1222907803, 1351150730, 1, 0, ''),
-	(37, 'seiven', '', '0b4e7a0e5fe84ad35fb5f95b9ceeac79', '', 1351145094, '127.0.0.1', 9, NULL, 'aaaaaa@as.ocm', '', 1345099019, 0, 1, 0, '');
+INSERT INTO `tpd_manager_user` (`id`, `account`, `nickname`, `password`, `bind_account`, `last_login_time`, `last_login_ip`, `status`, `login_count`, `verify`, `email`, `remark`, `create_time`, `update_time`, `type_id`, `info`) VALUES
+	(1, 'admin', '管理员1', '21232f297a57a5a743894a0e4a801fc3', '', 1356858145, '127.0.0.1', 1, 1046, '8888', 'liu21st@gmail.com', '备注信息', 1222907803, 1356845742, 0, ''),
+	(54, 'seiven', '海均', '0b4e7a0e5fe84ad35fb5f95b9ceeac79', '', 1356856022, '127.0.0.1', 1, 1, NULL, 'c.navy@qq.com', '', 1356855993, 0, 0, '');
 /*!40000 ALTER TABLE `tpd_manager_user` ENABLE KEYS */;
 /*!40014 SET FOREIGN_KEY_CHECKS=1 */;
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

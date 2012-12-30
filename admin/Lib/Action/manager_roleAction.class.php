@@ -4,373 +4,21 @@ class manager_roleAction extends CommonAction {
 	function _filter(&$map){
 		$map['name'] = array('like',"%".$_POST['name']."%");
 	}
-	/**
-	 +----------------------------------------------------------
-	 * 增加组操作权限
-	 *
-	 +----------------------------------------------------------
-	 * @access public
-	 +----------------------------------------------------------
-	 * @return void
-	 +----------------------------------------------------------
-	 * @throws FcsException
-	 +----------------------------------------------------------
-	 */
-	public function setApp()
-	{
-		$id     = $_POST['groupAppId'];
-		$groupId	=	$_POST['groupId'];
-		$group    =   D('manager_role');
-		$group->delGroupApp($groupId);
-		$result = $group->setGroupApps($groupId,$id);
-
-		if($result===false) {
-			$this->error('项目授权失败！');
-		}else {
-			$this->success('项目授权成功！');
-		}
-	}
-
-
-	/**
-	 +----------------------------------------------------------
-	 * 组操作权限列表
-	 *
-	 +----------------------------------------------------------
-	 * @access public
-	 +----------------------------------------------------------
-	 * @return void
-	 +----------------------------------------------------------
-	 * @throws FcsException
-	 +----------------------------------------------------------
-	 */
-	public function app()
-	{
-		//读取系统的项目列表
-		$node = D("manager_node");
-		$list =	$node->where('level=1')->field('id,title')->select();
-		foreach ($list as $vo){
-			$appList[$vo['id']]	=	$vo['title'];
-		}
-
-		//读取系统组列表
-		$group   =  D('manager_role');
-		$list       =  $group->field('id,name')->select();
-		foreach ($list as $vo){
-			$groupList[$vo['id']]	=	$vo['name'];
-		}
-		$this->assign("groupList",$groupList);
-
-		//获取当前用户组项目权限信息
-		$groupId =  isset($_GET['groupId'])?$_GET['groupId']:'';
-		$groupAppList = array();
-		if(!empty($groupId)) {
-			$this->assign("selectGroupId",$groupId);
-			//获取当前组的操作权限列表
-			$list	=	$group->getGroupAppList($groupId);
-			foreach ($list as $vo){
-				$groupAppList[$vo['id']]	=	$vo['id'];
-			}
-		}
-		$this->assign('groupAppList',$groupAppList);
-		$this->assign('appList',$appList);
-		C ( 'SHOW_RUN_TIME', false ); // 运行时间显示
-		C ( 'SHOW_PAGE_TRACE', false );
-		$this->display();
-		return;
-	}
-
-	/**
-	 +----------------------------------------------------------
-	 * 增加组操作权限
-	 *
-	 +----------------------------------------------------------
-	 * @access public
-	 +----------------------------------------------------------
-	 * @return void
-	 +----------------------------------------------------------
-	 * @throws FcsException
-	 +----------------------------------------------------------
-	 */
-	public function setModule()
-	{
-		$id     = $_POST['groupModuleId'];
-		$groupId	=	$_POST['groupId'];
-		$appId	=	$_POST['appId'];
-		$group    =   D('manager_role');
-		$group->delGroupModule($groupId,$appId);
-		$result = $group->setGroupModules($groupId,$id);
-
-		if($result===false) {
-			$this->error('模块授权失败！');
-		}else {
-			$this->success('模块授权成功！');
-		}
-	}
-
-
-	/**
-	 +----------------------------------------------------------
-	 * 组操作权限列表
-	 *
-	 +----------------------------------------------------------
-	 * @access public
-	 +----------------------------------------------------------
-	 * @return void
-	 +----------------------------------------------------------
-	 * @throws FcsException
-	 +----------------------------------------------------------
-	 */
-	public function module()
-	{
-		$groupId =  $_GET['groupId'];//7
-		$appId  = $_GET['appId'];//1
-
-		$group   =  D('manager_role');
-		//读取系统组列表
-		$list = $group->field('id,name')->select();
-		foreach ($list as $vo){
-			$groupList[$vo['id']]	=	$vo['name'];
-		}
-		$this->assign("groupList",$groupList);
-
-		if(!empty($groupId)) {
-			$this->assign("selectGroupId",$groupId);
-			//读取系统组的授权项目列表
-			$list	=	$group->getGroupAppList($groupId);
-			foreach ($list as $vo){
-				$appList[$vo['id']]	=	$vo['title'];
-			}
-			$this->assign("appList",$appList);
-		}
-		$node    =  D("manager_node");
-		if(!empty($appId)) {
-			$this->assign("selectAppId",$appId);
-			//读取当前项目的模块列表
-			$where['level']=2;
-			$where['pid']=$appId;
-			$nodelist=$node->field('id,title')->where($where)->select();
-			foreach ($nodelist as $vo){
-				$moduleList[$vo['id']]	=	$vo['title'];
-			}
-		}
-
-		//获取当前项目的授权模块信息
-		$groupModuleList = array();
-		if(!empty($groupId) && !empty($appId)) {
-			$grouplist = $group->getGroupModuleList($groupId,$appId);
-			foreach ($grouplist as $vo){
-				$groupModuleList[$vo['id']]	=	$vo['id'];
-			}
-		}
-		$this->assign('groupModuleList',$groupModuleList);
-		$this->assign('moduleList',$moduleList);
-		C ( 'SHOW_RUN_TIME', false ); // 运行时间显示
-		C ( 'SHOW_PAGE_TRACE', false );
-		$this->display();
-
-		return;
-	}
-
-	/**
-	 +----------------------------------------------------------
-	 * 增加组操作权限
-	 *
-	 +----------------------------------------------------------
-	 * @access public
-	 +----------------------------------------------------------
-	 * @return void
-	 +----------------------------------------------------------
-	 * @throws FcsException
-	 +----------------------------------------------------------
-	 */
-	public function setAction()
-	{
-		$id     = $_POST['groupActionId'];
-		$groupId	=	$_POST['groupId'];
-		$moduleId	=	$_POST['moduleId'];
-		$group    =   D('manager_role');
-		$group->delGroupAction($groupId,$moduleId);
-		$result = $group->setGroupActions($groupId,$id);
-
-		if($result===false) {
-			$this->error('操作授权失败！');
-		}else {
-			$this->success('操作授权成功！');
-		}
-	}
-
-
-	/**
-	 +----------------------------------------------------------
-	 * 组操作权限列表
-	 *
-	 +----------------------------------------------------------
-	 * @access public
-	 +----------------------------------------------------------
-	 * @return void
-	 +----------------------------------------------------------
-	 * @throws FcsException
-	 +----------------------------------------------------------
-	 */
-	public function action()
-	{
-		$groupId =  $_GET['groupId'];
-		$appId  = $_GET['appId'];
-		$moduleId  = $_GET['moduleId'];
-
-		$group   =  D('manager_role');
-		//读取系统组列表
-		$grouplist=$group->field('id,name')->select();
-		foreach ($grouplist as $vo){
-			$groupList[$vo['id']]	=	$vo['name'];
-		}
-		$this->assign("groupList",$groupList);
-
-		if(!empty($groupId)) {
-			$this->assign("selectGroupId",$groupId);
-			//读取系统组的授权项目列表
-			$list	=	$group->getGroupAppList($groupId);
-			foreach ($list as $vo){
-				$appList[$vo['id']]	=	$vo['title'];
-			}
-			$this->assign("appList",$appList);
-		}
-		if(!empty($appId)) {
-			$this->assign("selectAppId",$appId);
-			//读取当前项目的授权模块列表
-			$list	=	$group->getGroupModuleList($groupId,$appId);
-			foreach ($list as $vo){
-				$moduleList[$vo['id']]	=	$vo['title'];
-			}
-			$this->assign("moduleList",$moduleList);
-		}
-		$node    =  D("manager_node");
-
-		if(!empty($moduleId)) {
-			$this->assign("selectModuleId",$moduleId);
-			//读取当前项目的操作列表
-			$map['level']=3;
-			$map['pid']=$moduleId;
-			$list	=	$node->where($map)->field('id,title')->select();
-			if($list) {
-				foreach ($list as $vo){
-					$actionList[$vo['id']]	=	$vo['title'];
-				}
-			}
-		}
-
-
-		//获取当前用户组操作权限信息
-		$groupActionList = array();
-		if(!empty($groupId) && !empty($moduleId)) {
-			//获取当前组的操作权限列表
-			$list	=	$group->getGroupActionList($groupId,$moduleId);
-			if($list) {
-				foreach ($list as $vo){
-					$groupActionList[$vo['id']]	=	$vo['id'];
-				}
-			}
-
-		}
-
-		$this->assign('groupActionList',$groupActionList);
-		//$actionList = array_diff_key($actionList,$groupActionList);
-		$this->assign('actionList',$actionList);
-		C ( 'SHOW_RUN_TIME', false ); // 运行时间显示
-		C ( 'SHOW_PAGE_TRACE', false );
-		$this->display();
-
-		return;
-	}
-
-	/**
-	 +----------------------------------------------------------
-	 * 增加组操作权限
-	 +----------------------------------------------------------
-	 * @access public
-	 +----------------------------------------------------------
-	 * @return void
-	 +----------------------------------------------------------
-	 * @throws FcsException
-	 +----------------------------------------------------------
-	 */
-	public function setUser()
-	{
-		$id     = $_POST['groupUserId'];
-		$groupId	=	$_POST['groupId'];
-		$group    =   D('manager_role');
-		$group->delGroupUser($groupId);
-		$result = $group->setGroupUsers($groupId,$id);
-		if($result===false) {
-			$this->error('授权失败！');
-		}else {
-			$this->success('授权成功！');
-		}
-	}
-
-	/**
-	 +----------------------------------------------------------
-	 * 组操作权限列表
-	 +----------------------------------------------------------
-	 * @access public
-	 +----------------------------------------------------------
-	 * @return void
-	 +----------------------------------------------------------
-	 * @throws FcsException
-	 +----------------------------------------------------------
-	 */
-	public function user()
-	{
-		//读取系统的用户列表
-		$user    =   D('manager_user');
-		$list2=$user->field('id,account,nickname')->select();
-		//echo $user->getlastsql();
-		//dump(	$user);
-		foreach ($list2 as $vo){
-			$userList[$vo['id']]	=	$vo['account'].' '.$vo['nickname'];
-		}
-
-		$group    =   D('manager_role');
-		$list=$group->field('id,name')->select();
-		foreach ($list as $vo){
-			$groupList[$vo['id']]	=	$vo['name'];
-		}
-		$this->assign("groupList",$groupList);
-
-		//获取当前用户组信息
-		$groupId =  isset($_GET['id'])?$_GET['id']:'';
-		$groupUserList = array();
-		if(!empty($groupId)) {
-			$this->assign("selectGroupId",$groupId);
-			//获取当前组的用户列表
-			$list	=	$group->getGroupUserList($groupId);
-			foreach ($list as $vo){
-				$groupUserList[$vo['id']]	=	$vo['id'];
-			}
-
-		}
-		$this->assign('groupUserList',$groupUserList);
-		$this->assign('userList',$userList);
-		$this->display();
-
-		return;
-	}
-	public function _before_edit(){
+	function _before_edit(){
 		$Group = D('manager_role');
 		//查找满足条件的列表数据
 		$list     = $Group->field('id,name')->select();
 		$this->assign('list',$list);
 
 	}
-	public function _before_add(){
+	function _before_add(){
 		$Group = D('manager_role');
 		//查找满足条件的列表数据
 		$list     = $Group->field('id,name')->select();
 		$this->assign('list',$list);
 
 	}
-	public function select()
+	function select()
 	{
 		$map = $this->_search();
 		//创建数据对象
@@ -381,5 +29,124 @@ class manager_roleAction extends CommonAction {
 		$this->display();
 		return;
 	}
+	/**
+	 * 
+	 * 管理 角色用户分配
+	 */
+	function user()
+	{
+		$roleid = $this->_request('roleid','intval',0);
+		$role = M('manager_role')->field('id,name')->find($roleid);
+		if ($role){
+			if ($this->ispost())
+			{
+				// 提交数据处理
+				$select_user = $_POST['user'];
+				// 删除现有所有用户关系
+				M('manager_role_user')->where(array('role_id'=>$role['id']))->delete();
+				// 新增新用户关系
+				foreach ($select_user as $u)
+				{
+					M('manager_role_user')->data(array('role_id'=>$role['id'],
+						'user_id'=>$u
+						))->add();
+				}
+				$this->success('更新分组用户列表成功!');
+			}
+			// 读取系统的用户列表
+			$user_list = D('manager_user')->field('id,account,nickname')->select();
+			foreach ($user_list as $k=>$v){
+				// 检测每个用户是否在当前组
+				$user_list[$k]['status'] = 0;
+				if(M('manager_role_user')->where(array('role_id'=>$role['id'],'user_id'=>$v['id']))->count()){
+					// 存在用户
+					$user_list[$k]['status'] = 1;
+				}
+			}
+			//dump($user_list);
+			$this->assign('user_list',$user_list);
+			$this->assign('role',$role);
+			$this->display();
+		}else{
+			$this->error('读取错误请重试!','',true);
+		}
+	}
+	/**
+	 *
+	 * 获取所有可分配权限
+	 */
+	function set_access()
+	{
+		// 如果是提交数据则保存数据
+		if ($this->isPost() && $this->_post('isajax','intval',0) == 1)
+		{
+			$role_id = $this->_post('role_id','intval',0);
+			if ($role_id)
+			{
+				$_post_roles = $_POST['role'];
+				if ($_post_roles){
+					// 先删除现在的所有权限配置
+					M('manager_access')->where("role_id='$role_id' AND level != 1" )->delete();
+					// 组合数据新增新的权限配置
+					$_parent = array();
+					// 增加action
+					foreach ($_post_roles as $r)
+					{
+						$_ = explode('_', $r);
+						$_role = array(
+							'role_id'=>$role_id,
+							'node_id'=>$_[0],
+							'level'=>$_[1],
+							'pid'=>$_[2]
+						);
+						$_parent[] = $_[2];
+						M('manager_access')->data($_role)->add();
+					}
+					// 增加controller
+					$_parent = array_unique($_parent);
+					foreach ($_parent as $v)
+					{
+						$_role = array(
+							'role_id'=>$role_id,
+							'node_id'=>$v,
+							'level'=>2,
+							'pid'=>1
+						);
+						M('manager_access')->data($_role)->add();
+					}
+					$this->success('授权成功','',true);
+				}
+			}
+		}
+		// 获取要授权的角色信息
+		$roleid = $this->_request('roleid','intval',0);
+		$role = M('manager_role')->find($roleid);
+		$this->assign('role',$role);
+		// 获取当前角色的现有权限列表
+		$access = array();
+		if ($role){
+			$_tmp_access = M('manager_access')->field('node_id')->where('role_id='.$role['id'])->select();
+			foreach ($_tmp_access as $_titem )
+			{
+				$access[] = $_titem['node_id'];
+			}
+		}
+		// 获取所有需要权限管理的操作列表
+		$manager_node = D('manager_node')->where(array(
+			'level'=>2,'ismenu'=>1,
+			'status'=>1))->field('name,title,id,pid,level')->relation(true)->select();
+		// 检测权限是否有权限
+		foreach ($manager_node as $k=>$node)// controller
+		{
+			// action
+			foreach ($node['child'] as $i=>$chole_node)
+			{
+				$manager_node[$k]['child'][$i]['access'] = 0;
+				if (in_array($chole_node['id'], $access)) $manager_node[$k]['child'][$i]['access'] = 1;
+			}
+		}
+		//dump($manager_node);
+		$this->assign('nodes',$manager_node);
+		$this->display();
+	}
 }
-?>

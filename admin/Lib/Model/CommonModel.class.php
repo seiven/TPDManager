@@ -1,5 +1,5 @@
 <?php
-class CommonModel extends Model {
+class CommonModel extends RelationModel {
 
 	// 获取当前用户的ID
     public function getMemberId() {
@@ -25,29 +25,7 @@ class CommonModel extends Model {
         }else {
             return True;
         }
-    }
-
-	 /**
-     +----------------------------------------------------------
-     * 根据条件批准表数据
-     +----------------------------------------------------------
-     * @access public
-     +----------------------------------------------------------
-     * @param array $options 条件
-     +----------------------------------------------------------
-     * @return boolen
-     +----------------------------------------------------------
-     */
-
-    public function checkPass($options,$field='status'){
-        if(FALSE === $this->where($options)->setField($field,1)){
-            $this->error =  L('_OPERATION_WRONG_');
-            return false;
-        }else {
-            return True;
-        }
-    }
-
+    } 
 
     /**
      +----------------------------------------------------------
@@ -88,23 +66,4 @@ class CommonModel extends Model {
             return True;
         }
     }
-
-    public function recommend($options,$field='is_recommend'){
-        if(FALSE === $this->where($options)->setField($field,1)){
-            $this->error =  L('_OPERATION_WRONG_');
-            return false;
-        }else {
-            return True;
-        }
-    }
-
-    public function unrecommend($options,$field='is_recommend'){
-        if(FALSE === $this->where($options)->setField($field,0)){
-            $this->error =  L('_OPERATION_WRONG_');
-            return false;
-        }else {
-            return True;
-        }
-    }
 }
-?>

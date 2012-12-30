@@ -3,12 +3,12 @@
 class manager_roleModel extends CommonModel {
 	public $_validate = array(
 		array('name','require','名称必须'),
-		);
+	);
 
-	public $_auto		=	array(
+	public $_auto =	array(
 		array('create_time','time',self::MODEL_INSERT,'function'),
 		array('update_time','time',self::MODEL_UPDATE,'function'),
-		);
+	);
 
 	function setGroupApps($groupId,$appIdList)
 	{
@@ -77,41 +77,41 @@ class manager_roleModel extends CommonModel {
 		}
 	}
 
-function delGroupAction($groupId,$moduleId)
-{
-    $table = C('RBAC_ACCESS_TABLE');
+	function delGroupAction($groupId,$moduleId)
+	{
+		$table = C('RBAC_ACCESS_TABLE');
 
-    $result = $this->db->execute('delete from '.$table.' where level=3 and pid='.$moduleId.' and role_id='.$groupId);
-    if($result===false) {
-        return false;
-    }else {
-        return true;
-    }
-}
-
-function getGroupActionList($groupId,$moduleId)
-{
-    $table = C('RBAC_ACCESS_TABLE');
-    $rs = $this->db->query('select b.id,b.title,b.name from '.$table.' as a ,'.$this->tablePrefix.'node as b where a.node_id=b.id and  b.pid='.$moduleId.' and  a.role_id='.$groupId.' ');
-    return $rs;
-}
-
-function setGroupActions($groupId,$actionIdList)
-{
-    if(empty($actionIdList)) {
-        return true;
-    }
-	if(is_array($actionIdList)) {
-	    $actionIdList = implode(',',$actionIdList);
+		$result = $this->db->execute('delete from '.$table.' where level=3 and pid='.$moduleId.' and role_id='.$groupId);
+		if($result===false) {
+			return false;
+		}else {
+			return true;
+		}
 	}
-    $where = 'a.id ='.$groupId.' AND b.id in('.$actionIdList.')';
-    $rs = $this->db->execute('INSERT INTO '.C('RBAC_ACCESS_TABLE').' (role_id,node_id,pid,level) SELECT a.id, b.id,b.pid,b.level FROM '.C('RBAC_ROLE_TABLE').' a, '.C('RBAC_NODE_TABLE').' b WHERE '.$where);
-    if($result===false) {
-        return false;
-    }else {
-        return true;
-    }
-}
+
+	function getGroupActionList($groupId,$moduleId)
+	{
+		$table = C('RBAC_ACCESS_TABLE');
+		$rs = $this->db->query('select b.id,b.title,b.name from '.$table.' as a ,'.$this->tablePrefix.'node as b where a.node_id=b.id and  b.pid='.$moduleId.' and  a.role_id='.$groupId.' ');
+		return $rs;
+	}
+
+	function setGroupActions($groupId,$actionIdList)
+	{
+		if(empty($actionIdList)) {
+			return true;
+		}
+		if(is_array($actionIdList)) {
+			$actionIdList = implode(',',$actionIdList);
+		}
+		$where = 'a.id ='.$groupId.' AND b.id in('.$actionIdList.')';
+		$rs = $this->db->execute('INSERT INTO '.C('RBAC_ACCESS_TABLE').' (role_id,node_id,pid,level) SELECT a.id, b.id,b.pid,b.level FROM '.C('RBAC_ROLE_TABLE').' a, '.C('RBAC_NODE_TABLE').' b WHERE '.$where);
+		if($result===false) {
+			return false;
+		}else {
+			return true;
+		}
+	}
 
 	function getGroupUserList($groupId)
 	{
@@ -161,17 +161,17 @@ function setGroupActions($groupId,$actionIdList)
 		}
 	}
 
-    protected function fieldFormat(&$value)
-    {
-        if(is_int($value)) {
-            $value = intval($value);
-        } else if(is_float($value)) {
-            $value = floatval($value);
-        }else if(is_string($value)) {
-            $value = '"'.addslashes($value).'"';
-        }
-        return $value;
-    }
+	protected function fieldFormat(&$value)
+	{
+		if(is_int($value)) {
+			$value = intval($value);
+		} else if(is_float($value)) {
+			$value = floatval($value);
+		}else if(is_string($value)) {
+			$value = '"'.addslashes($value).'"';
+		}
+		return $value;
+	}
 
 }
 ?>

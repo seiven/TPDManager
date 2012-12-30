@@ -7,12 +7,12 @@
     <ul class="tree treeFolder">
       <volist id="nav" name="navs" >
         <li> <a 
-          <if condition="!count($nav['child'])">href="__APP__/{$nav['controller']}/{$nav['action']}" target="{$nav['target']}" mask="true" rel="{$nav['title']}"</if>
+          <if condition="count($nav['child']) eq 0">href="__APP__/{$nav['controller']}/{$nav['action']}" target="{$nav['target']}" mask="true" rel="{$nav['title']}"</if>
           >{$nav['title']}</a>
-          <if condition="count($nav['child'])">
+          <if condition="count($nav['child']) gt 0">
             <ul>
               <volist id="cnav" name="nav.child" >
-                <li><a href="__APP__/{$cnav['controller']}/{$cnav['action']}" target="{$cnav['target']}" mask="true" rel="{$cnav['title']}">{$cnav['title']}</a></li>
+                <li><a href="__APP__/{$cnav['controller']}/{$cnav['action']}" target="{$cnav['target']}" mask="true" rel="{$cnav['controller']}_{$cnav['action']}">{$cnav['title']}</a></li>
               </volist>
             </ul>
           </if>

@@ -65,7 +65,4 @@ class manager_userAction extends CommonAction {
 			$this->error('重置密码失败！');
 		}
 	}
-
-
 }
-?>

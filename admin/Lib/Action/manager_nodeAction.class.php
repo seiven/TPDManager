@@ -22,19 +22,9 @@ class manager_nodeAction extends CommonAction {
                 $this->assign('level',1);
             }
         }
-	}
-
-	public function _before_index() {
-		$model	=	M('manager_group');
-		$list	=	$model->where('status=1')->getField('id,title');
-		$this->assign('groupList',$list);
-	}
-
+	} 
 	// 获取配置类型
 	public function _before_add() {
-		$model	=	M('manager_group');
-		$list	=	$model->where('status=1')->select();
-		$this->assign('list',$list);
 		$node	=	M("manager_node");
 		$node->getById(session('currentNodeId'));
         $this->assign('pid',$node->id);
@@ -50,12 +40,6 @@ class manager_nodeAction extends CommonAction {
         $this->assign('pid',$node->id);
 		$this->assign('level',$node->level+1);
     }
-	public function _before_edit() {
-		$model	=	M('manager_group');
-		$list	=	$model->where('status=1')->select();
-		$this->assign('list',$list);
-	}
-
     /**
      +----------------------------------------------------------
      * 默认排序操作

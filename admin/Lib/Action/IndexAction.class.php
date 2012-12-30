@@ -5,9 +5,16 @@ class IndexAction extends CommonAction {
 		if (isset ( $_SESSION [C ( 'USER_AUTH_KEY' )] )) {
 			// 获取目前所有的菜单
 			$caidan = array();
-			$_access_list = session('_ACCESS_LIST');
-			$_modle_menus = D('manager_menus');
-			$menus = $_modle_menus->where('pid=0')->relation(true)->select();
+			if(C('USER_AUTH_TYPE') == 2) { 
+				//通过数据库进行访问检查
+				$_access_list = RBAC::getAccessList(session(C('USER_AUTH_KEY')));
+			}else { 
+				//登录验证模式，比较登录后保存的权限访问列表
+				$_access_list = session('_ACCESS_LIST');
+			}
+			//dump($_access_list);
+			// 所有菜单
+			$menus = D('manager_menus')->where('pid=0')->relation(true)->select(); 
 			foreach($menus as $item)
 			{
 				$_t = array();
@@ -16,9 +23,9 @@ class IndexAction extends CommonAction {
 					foreach ($item['child'] as $v)
 					{
 						$_isaccess = isset($_access_list[strtoupper ( APP_NAME )][strtoupper( $v ['controller'] )][strtoupper($v ['action'])]);
-						if (strtolower($v ['action'] == 'index'))
+						if (strtolower($v['action']) == 'index')
 						{
-							$_isaccess = isset($_access_list[strtoupper ( APP_NAME )][strtoupper( $v ['controller'] )]);
+							//$_isaccess = isset($_access_list[strtoupper ( APP_NAME )][strtoupper( $v ['controller'] )]);
 						}
 						if ($_isaccess || session (C('ADMIN_AUTH_KEY'))) {
 							$_t[] = $v;

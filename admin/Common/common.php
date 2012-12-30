@@ -74,7 +74,7 @@ function getStatus($status, $imageShow = true) {
 
 }
 /**
- * 
+ *
  * 显示问题状态
  * @param unknown_type $style
  */
@@ -131,30 +131,15 @@ function getNodeName($id) {
 
 function get_pawn($pawn) {
 	if ($pawn == 0)
-		return "<span style='color:green'>没有</span>";
+	return "<span style='color:green'>没有</span>";
 	else
-		return "<span style='color:red'>有</span>";
+	return "<span style='color:red'>有</span>";
 }
 function get_patent($patent) {
 	if ($patent == 0)
-		return "<span style='color:green'>没有</span>";
+	return "<span style='color:green'>没有</span>";
 	else
-		return "<span style='color:red'>有</span>";
-}
-
-
-function getNodeGroupName($id) {
-	if (empty ( $id )) {
-		return '未分组';
-	}
-	if (isset ( $_SESSION ['nodeGroupList'] )) {
-		return $_SESSION ['nodeGroupList'] [$id];
-	}
-	$Group = D ( 'manager_group' );
-	$list = $Group->getField ( 'id,title' );
-	$_SESSION ['nodeGroupList'] = $list;
-	$name = $list [$id];
-	return $name;
+	return "<span style='color:red'>有</span>";
 }
 
 function getCardStatus($status) {
@@ -258,17 +243,17 @@ function sort_by($array, $keyname = null, $sortby = 'asc') {
 }
 
 /**
-	 +----------------------------------------------------------
+ +----------------------------------------------------------
  * 产生随机字串，可用来自动生成密码
  * 默认长度6位 字母和数字混合 支持中文
-	 +----------------------------------------------------------
+ +----------------------------------------------------------
  * @param string $len 长度
  * @param string $type 字串类型
  * 0 字母 1 数字 其它 混合
  * @param string $addChars 额外字符
-	 +----------------------------------------------------------
+ +----------------------------------------------------------
  * @return string
-	 +----------------------------------------------------------
+ +----------------------------------------------------------
  */
 function rand_string($len = 6, $type = '', $addChars = '') {
 	$str = '';
@@ -317,7 +302,7 @@ function percent_format($number, $decimals=0) {
  * @param $tname 表名
  * @param $where 搜索条件
  * @param $order 排序条件 如："id desc";
- * @param $count 取前几条数据 
+ * @param $count 取前几条数据
  */
 function findList($tname,$where="", $order, $count){
 	$m = M($tname);
@@ -340,5 +325,15 @@ function attrById($name, $attr, $id){
 	$m = M($name);
 	$a = $m->where('id='.$id)->getField($attr);
 	return $a;
+}
+
+function rand_color()
+{
+	$r = '';
+	$a = array(1,2,3,4,5,6);
+	foreach ($a as $i){
+		$r .= dechex(rand(1, 16));
+	}
+	return $r;
 }
 ?>

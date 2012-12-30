@@ -9,9 +9,9 @@ class CommonAction extends Action {
 			import('@.ORG.Util.RBAC');
 			if (! RBAC::AccessDecision ()) {
 				//检查认证识别号
-				if (! $_SESSION [C ( 'USER_AUTH_KEY' )]) {
-					if ($this->isAjax()){ // zhanghuihua@msn.com
-						$this->ajaxReturn(true, "", 301);
+				if (! session(C ( 'USER_AUTH_KEY' ))) {
+					if ($this->isAjax()){
+						$this->ajaxReturn(true, '', 301);
 					} else {
 						//跳转到认证网关
 						redirect ( PHP_FILE . C ( 'USER_AUTH_GATEWAY' ) );
@@ -30,12 +30,14 @@ class CommonAction extends Action {
 				}
 			}
 		}
+		$this->assign('controller',MODULE_NAME);
+		$this->assign('action',ACTION_NAME);
 	}
 	public function index() {
 		//列表过滤器，生成查询Map对象
 		$map = $this->_search ();
 		if (method_exists ( $this, '_filter' )) {
-			$this->_filter ( $map );
+			$this->_filter ( &$map );
 		}
 		$name = $this->getActionName();
 		$model = D ($name);
@@ -90,7 +92,6 @@ class CommonAction extends Action {
 			}
 		}
 		return $map;
-
 	}
 
 	/**
@@ -121,8 +122,7 @@ class CommonAction extends Action {
 		//排序方式默认按照倒序排列
 		//接受 sost参数 0 表示倒序 非0都 表示正序
 		if (isset ( $_REQUEST ['_sort'] )) {
-			//			$sort = $_REQUEST ['_sort'] ? 'asc' : 'desc';
-			$sort = $_REQUEST ['_sort'] == 'asc' ? 'asc' : 'desc'; //zhanghuihua@msn.com
+			$sort = $_REQUEST ['_sort'] == 'asc' ? 'asc' : 'desc';
 		} else {
 			$sort = $asc ? 'asc' : 'desc';
 		}
@@ -139,9 +139,9 @@ class CommonAction extends Action {
 			$p = new Page ( $count, $listRows );
 			//分页查询数据
 			if($this->relation){
-				$voList = $model->where($map)->order( "`" . $order . "` " . $sort)->page($currentPage . ',' . $p->listRows)->relation(true)->select ( );
+				$voList = $model->where($map)->order( "`$order` $sort")->page("{$currentPage},{$p->listRows}")->relation(true)->select ( );
 			}else{
-				$voList = $model->where($map)->order( "`" . $order . "` " . $sort)->page($currentPage . ',' . $p->listRows)->select ( );
+				$voList = $model->where($map)->order( "`$order` $sort")->page("{$currentPage},{$p->listRows}")->select ( );
 			}
 			//echo $model->getlastsql();
 			//分页跳转的时候保证查询条件
@@ -162,103 +162,85 @@ class CommonAction extends Action {
 			$this->assign ( 'order', $order );
 			$this->assign ( 'sortImg', $sortImg );
 			$this->assign ( 'sortType', $sortAlt );
-			$this->assign ( "page", $page );
+			$this->assign ( 'page', $page );
 		}
-
-		//zhanghuihua@msn.com
+		//echo $model->getlastsql();
 		$this->assign ( 'totalCount', $count );
 		$this->assign ( 'numPerPage', $p->listRows );
 		$this->assign ( 'currentPage', $currentPage);
-			
 		Cookie::set ( '_currentUrl_', __SELF__ );
 		return;
 	}
-
-	function insert() {
-		//B('FilterString');
-		$name = $this->getActionName();
-		$model = D ($name);
-		if (false === $model->create ()) {
-			$this->error ( $model->getError () );
-		}
-		//保存当前数据对象
-		$list=$model->add ();
-		if ($list!==false) { //保存成功
-			$this->assign ( 'jumpUrl', Cookie::get ( '_currentUrl_' ) );
-			$this->success ('新增成功!');
-		} else {
-			//失败提示
-			$this->error ('新增失败!');
-		}
-	}
-
+	/**
+	 *
+	 * 新增页面
+	 */
 	public function add() {
+		if ($this->ispost())
+		{
+			// 提交处理
+			$name = $this->getActionName();
+			$model = D ($name);
+			if (false === $model->create ()) {
+				$this->error ( $model->getError () );
+			}
+			//保存当前数据对象
+			$list=$model->add ();
+			if ($list!==false) { //保存成功
+				$this->assign ( 'jumpUrl', Cookie::get ( '_currentUrl_' ) );
+				$this->success ('新增成功!');
+			} else {
+				//失败提示
+				$this->error ('新增失败!');
+			}
+		}
 		$this->display ();
 	}
-
-	function read() {
-		$this->edit ();
-	}
-
+	/**
+	 *
+	 * 修改页面
+	 */
 	function edit() {
 		$name = $this->getActionName();
 		$model = D ( $name );
+		if ($this->ispost())
+		{
+			// 提交处理
+			if (false === $model->create ()) {
+				$this->error ( $model->getError () );
+			}
+			// 更新数据
+			$list = $model->save ();
+			if (false !== $list) {
+				//成功提示
+				$this->assign ( 'jumpUrl', Cookie::get ( '_currentUrl_' ) );
+				$this->success ('编辑成功!');
+			} else {
+				//错误提示
+				$this->error ('编辑失败!');
+			}
+		}
 		$id = $_REQUEST [$model->getPk ()];
-		$vo = $model->getById ( $id );
+		if ($this->relation) {
+			$vo = $model->relation(true)->getById ( $id );
+		}else{
+			$vo = $model->getById ( $id );
+		}
 		$this->assign ( 'vo', $vo );
 		$this->display ();
 	}
-
-	function update() {
-		//B('FilterString');
-		$name = $this->getActionName();
-		$model = D ( $name );
-		if (false === $model->create ()) {
-			$this->error ( $model->getError () );
-		}
-		// 更新数据
-		$list=$model->save ();
-		if (false !== $list) {
-			//成功提示
-			$this->assign ( 'jumpUrl', Cookie::get ( '_currentUrl_' ) );
-			$this->success ('编辑成功!');
-		} else {
-			//错误提示
-			$this->error ('编辑失败!');
-		}
+	/**
+	 *
+	 * 编辑自动刷新背景页面和关闭dialog
+	 */
+	function ajaxAssign(&$result){
+		$result['callbackType'] = 'closeCurrent';
 	}
 	/**
-	 +----------------------------------------------------------
-	 * 默认删除操作
-	 +----------------------------------------------------------
-	 * @access public
-	 +----------------------------------------------------------
-	 * @return string
-	 +----------------------------------------------------------
-	 * @throws ThinkExecption
-	 +----------------------------------------------------------
+	 *
+	 * 永久删除
 	 */
 	public function delete() {
-		//删除指定记录
-		$name = $this->getActionName();
-		$model = M ($name);
-		if (! empty ( $model )) {
-			$pk = $model->getPk ();
-			$id = $_REQUEST [$pk];
-			if (isset ( $id )) {
-				$condition = array ($pk => array ('in', explode ( ',', $id ) ) );
-				$list=$model->where ( $condition )->setField ( 'status', - 1 );
-				if ($list!==false) {
-					$this->success ('删除成功！' );
-				} else {
-					$this->error ('删除失败！');
-				}
-			} else {
-				$this->error ( '非法操作' );
-			}
-		}
-	}
-	public function foreverdelete() {
 		//删除指定记录
 		$name = $this->getActionName();
 		$model = D ($name);
@@ -288,21 +270,6 @@ class CommonAction extends Action {
 		}
 		$this->forward ();
 	}
-
-	public function clear() {
-		//删除指定记录
-		$name = $this->getActionName();
-		$model = D ($name);
-		if (! empty ( $model )) {
-			if (false !== $model->where ( 'status=-1' )->delete ()) { // zhanghuihua@msn.com change status=1 to status=-1
-				$this->assign ( "jumpUrl", $this->getReturnUrl () );
-				$this->success ( L ( '_DELETE_SUCCESS_' ) );
-			} else {
-				$this->error ( L ( '_DELETE_FAIL_' ) );
-			}
-		}
-		$this->forward ();
-	}
 	/**
 	 +----------------------------------------------------------
 	 * 默认禁用操作
@@ -321,28 +288,14 @@ class CommonAction extends Action {
 		$pk = $model->getPk ();
 		$id = $_REQUEST [$pk];
 		$condition = array ($pk => array ('in', $id ) );
-		$list=$model->forbid ( $condition );
-		if ($list!==false) {
+		$list = $model->forbid ( $condition );
+		if ($list !== false) {
 			$this->assign ( "jumpUrl", $this->getReturnUrl () );
 			$this->success ( '状态禁用成功' );
 		} else {
 			$this->error  (  '状态禁用失败！' );
 		}
 	}
-	public function checkPass() {
-		$name = $this->getActionName();
-		$model = D ($name);
-		$pk = $model->getPk ();
-		$id = $_GET [$pk];
-		$condition = array ($pk => array ('in', $id ) );
-		if (false !== $model->checkPass( $condition )) {
-			$this->assign ( "jumpUrl", $this->getReturnUrl () );
-			$this->success ( '状态批准成功！' );
-		} else {
-			$this->error  (  '状态批准失败！' );
-		}
-	}
-
 	public function recycle() {
 		$name = $this->getActionName();
 		$model = D ($name);
@@ -355,17 +308,6 @@ class CommonAction extends Action {
 		} else {
 			$this->error   (  '状态还原失败！' );
 		}
-	}
-
-	public function recycleBin() {
-		$map = $this->_search ();
-		$map ['status'] = - 1;
-		$name=$this->getActionName();
-		$model = D ($name);
-		if (! empty ( $model )) {
-			$this->_list ( $model, $map );
-		}
-		$this->display ();
 	}
 
 	/**

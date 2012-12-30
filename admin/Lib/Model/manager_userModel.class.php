@@ -24,4 +24,3 @@ class manager_userModel extends CommonModel {
 		}
 	}
 }
-?>
