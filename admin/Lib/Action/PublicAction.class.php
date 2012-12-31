@@ -16,7 +16,7 @@ class PublicAction extends Action {
 		redirect(__APP__);
 	}
 	// 检查用户是否登录
-	protected function _check_login() {
+	protected function check_login() {
 		if(!session(C('USER_AUTH_KEY'))) {
 			$this->assign('jumpUrl',C('USER_AUTH_GATEWAY'));
 			$this->error('没有登录');
@@ -92,10 +92,17 @@ class PublicAction extends Action {
 			$this->redirect('Index/index');
 		}
 	}
+	/**
+	 *
+	 * 编辑自动刷新背景页面和关闭dialog
+	 */
+	function ajaxAssign(&$result){
+		$result['callbackType'] = 'closeCurrent';
+	}
 	// 更换密码
 	public function changePwd()
 	{
-		$this->_check_login();
+		$this->check_login();
 		//对表单提交处理进行处理或者增加非表单数据
 		if(md5($_POST['verify']) != session('verify')) {
 			$this->error('验证码错误！');
@@ -122,7 +129,7 @@ class PublicAction extends Action {
 	 * 修改资料
 	 */
 	public function profile() {
-		$this->_check_login();
+		$this->check_login();
 		if ($this->ispost())
 		{
 			// 提交数据处理
