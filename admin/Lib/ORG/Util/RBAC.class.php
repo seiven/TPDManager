@@ -220,18 +220,9 @@ class RBAC {
         	'user'=>C('RBAC_USER_TABLE'),
         	'access'=>C('RBAC_ACCESS_TABLE'),
         	'node'=>C('RBAC_NODE_TABLE')
-		);
-		$sql = "select node.id,node.name from
-		{$table['role']} as role,
-		{$table['user']} as user,
-		{$table['access']} as access ,
-		{$table['node']} as node
-                     where user.user_id = '{$authId}' and 
-                     user.role_id = role.id 
-                     and ( access.role_id = role.id  or (access.role_id = role.pid and role.pid != 0 ) ) 
-                     and role.status = 1 and access.node_id = node.id 
-                     and node.level = 1 and node.status = 1";
-		$apps = $db->query($sql);
+		); 
+		$apps = M('manager_node')->where(array(
+					'status'=>1,'level'=>1))->field('id,name')->select();
 		$access = array();
 		foreach($apps as $key=>$app) {
 			$appId = $app['id'];
@@ -239,10 +230,10 @@ class RBAC {
 			// 读取项目的模块权限
 			$access[strtoupper($appName)] = array();
 			$sql = "select node.id,node.name from ".
-			$table['role']." as role,".
-			$table['user']." as user,".
-			$table['access']." as access ,".
-			$table['node']." as node ".
+					$table['role']." as role,".
+					$table['user']." as user,".
+					$table['access']." as access ,".
+					$table['node']." as node ".
                     "where user.user_id='{$authId}' and user.role_id=role.id and ( access.role_id=role.id  or (access.role_id=role.pid and role.pid!=0 ) ) 
                     	and role.status=1 and access.node_id=node.id and node.level=2 and node.pid={$appId} 
                     	and node.status=1";
