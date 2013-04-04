@@ -144,7 +144,7 @@ function layout($layout) {
 
 // URL组装 支持不同模式
 // 格式：U('[分组/模块/操作]?参数','参数','伪静态后缀','是否跳转','显示域名')
-function U($url,$vars='',$suffix=true,$redirect=false,$domain=false) {
+function U($url,$vars='',$suffix=true,$redirect=false,$domain=false,$model = null) {
     // 解析URL
     $info =  parse_url($url);
     $url   =  !empty($info['path'])?$info['path']:ACTION_NAME;
@@ -209,8 +209,9 @@ function U($url,$vars='',$suffix=true,$redirect=false,$domain=false) {
             }
         }
     }
-
-    if(C('URL_MODEL') == 0) { // 普通模式URL转换
+    // 可设置模式	2013/03/08
+	if ($model === null) $model = C('URL_MODEL');
+    if(intval($model) == 0) { // 普通模式URL转换
         $url   =  __APP__.'?'.http_build_query($var);
         if(!empty($vars)) {
             $vars = http_build_query($vars);
@@ -236,6 +237,8 @@ function U($url,$vars='',$suffix=true,$redirect=false,$domain=false) {
     if($domain) {
         $url   =  'http://'.$domain.$url;
     }
+    // 2013/03/08	替换url中的特殊字符
+    $url = str_replace('&amp;', '&', $url);
     if($redirect) // 直接跳转URL
         redirect($url);
     else
