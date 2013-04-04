@@ -19,7 +19,10 @@ $config	= array(
 	'SESSION_AUTO_START'=>true,
 
 	'VAR_PAGE'=>'pageNum',
-
+	
+	'TMPL_PARSE_STRING'=>array(
+		'__PUBLIC__'=>'/'.APP_PATH.'static'
+	)
 );
 /**
  * 权限管理系统需要配置
